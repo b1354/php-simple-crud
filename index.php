@@ -54,19 +54,24 @@
         </div>
     </form>
 
-    <p><a class="btn btn-sm btn-primary my-2" href="tambah.php"><b>+</b> Tambah data mahasiswa</a></p>
+    <p>
+      <a class="btn btn-sm btn-primary my-2" href="tambah.php"><b>+</b> Tambah data mahasiswa</a>
+      <?php if(isset($_GET["submit"])) :?>
+      <a class="btn btn-sm btn-danger my-2" href="/belajarphp/datamahasiswa/"><b>!</b> Bersihkan Search</a>
+      <?php endif ?>
+    </p>
 
     <div class="table-responsive">
       <table class="table table-striped table-hover">
 
         <tr>
-          <th scope="col">No.</th>
-          <th scope="col">Aksi</th>
-          <th scope="col">Gambar</th>
-          <th scope="col">NIM</th>
-          <th scope="col">Nama</th>
-          <th scope="col">Email</th>
-          <th scope="col">Jurusan</th>
+          <th>No.</th>
+          <th>Aksi</th>
+          <th>Gambar</th>
+          <th>NIM</th>
+          <th>Nama</th>
+          <th>Email</th>
+          <th>Jurusan</th>
         </tr>
 
         <?php $nomor = 1;?>
@@ -84,7 +89,7 @@
               onclick="return confirm('apakah benar ingin menghapus?')"
             ><span class="bi bi-trash"></span></a>
           </td>
-          <td><img width="200" src="<?= $row["gambar"]?>" alt="<?= $row["gambar"] ?>"></td>
+          <td><img width="100" height="100" src="image/<?= $row["gambar"]?>" alt="<?= $row["gambar"] ?>"></td>
           <td><?= $row["nim"] ?></td>
           <td><?= $row["nama"] ?></td>
           <td><?= $row["email"] ?></td>

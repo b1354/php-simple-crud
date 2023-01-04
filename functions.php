@@ -22,6 +22,29 @@
     return $rows;
   }
 
+  function uploadImage ( $data, $path ) {
+    $result = [];
+    $tmp_name = explode(".", $data["name"]);
+    $fileExtension = end( $tmp_name );
+    $fileName = uniqid(rand(), true) . "." . $fileExtension;
+    var_dump($data);
+
+    if($data["error"])  {
+      $result["error"] = true;
+      $result["message"] = "gambar harus dimasukan";
+      return $result;
+    }
+
+    if($data["size"] > 500000 ) {
+      $result["error"] = true;
+      $result["message"] = "ukuran gambar terlalu besar";
+      return $result;
+    }
+
+    move_uploaded_file($data["tmp_name"], $path."/".$fileName);
+    return $fileName;
+  }
+
   function tambah ($data) {
     global $conn;
 
@@ -32,7 +55,8 @@
     $nama = htmlspecialchars($data['nama']);
     $email = htmlspecialchars($data['email']);
     $prodi = htmlspecialchars($data['prodi']);
-    $gambar = htmlspecialchars($data['gambar']);
+
+    $gambar = uploadImage($_FILES['gambar'], "image");
 
     $query = "INSERT INTO mahasiswa
                 (nim, nama, email, prodi, gambar)

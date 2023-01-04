@@ -59,7 +59,7 @@
     <input type="text" name="prodi" id="prodi" class="form-control" required>
 
     <label class="form-label" for="gambar">gambar: </label>
-    <input type="file" name="gambar" id="gambar" class="form-control" required>
+    <input type="file" name="gambar" id="gambar" class="form-control">
 
     <br>
 
