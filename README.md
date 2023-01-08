@@ -1,2 +1,2 @@
 # php-simple-crud
-Program CRUD simple menggunakan native PHP
+Program CRUD simple menggunakan native PHP dan bootstrap
