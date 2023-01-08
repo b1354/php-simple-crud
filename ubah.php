@@ -4,7 +4,13 @@
   // ambil data di url
   $id =$_GET['id'];
 
+  // cek apakah tombol delete image ditekan
+  if ( isset($_POST["deleteImg"]) ) {
+    deleteImage($id);
+  }
+
   // karena hasil dari fungsi query adalah array, maka diambil index pertamanya
+  // disimpan dibawah delete image agar mendapatkan perubahan terbaru jika didelete
   $mhs = query("SELECT * FROM mahasiswa WHERE id = $id ")[0];
 
   // cek apakah tombol submit sudah ditekan
@@ -27,6 +33,7 @@
       ";
     }
   }
+
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +58,7 @@
 <body>
   <div class="container">
   <h1 class="text-center my-5">Ubah data mahasiswa</h1>
-  <form action="" method="post">
+  <form action="" method="post" enctype="multipart/form-data">
     <label class="form-label" for="nim">nim: </label>
     <input type="text" name="nim" id="nim" class="form-control" value="<?= $mhs["nim"] ?>" required>
 
@@ -64,13 +71,38 @@
     <label class="form-label" for="prodi">prodi: </label>
     <input type="text" name="prodi" id="prodi" class="form-control" value="<?= $mhs["prodi"] ?>" required>
 
-    <label class="form-label" for="gambar">gambar: </label>
-    <input type="text" name="gambar" id="gambar" class="form-control" value="<?= $mhs["gambar"] ?>" required>
+    <label class="form-label m-0" for="gambar" style="display:block">gambar: 
+      <img 
+        src="images/<?= $mhs["gambar"] ?>"
+        alt="<?= $mhs["nama"]?>"
+        width="150" height="150"
+        id="gambarMhs"
+        style="object-fit: contain; display: block"
+      >
+    </label>
+    <button class="btn btn-sm btn-danger my-3" type="submit" name="deleteImg"><span class="bi bi-trash"></span>Delete gambar</button>
+    <input type="file" name="gambar" id="gambar" class="form-control" accept="images/jpg images/jpg">
 
-    <br>
+    <div class="my-3">
+      <a href="index.php" class="btn btn-warning"><span class="bi bi-arrow-left-circle"></span> Kembali</a>
+      <button class="btn btn-primary" type="submit" name="submit"><b>+</b> ubah Data</button></li>
+    </div>
 
-    <button class="btn btn-primary" type="submit" name="submit"><b>+</b> Tambah data</button></li>
   </form>
   </div>
+
+  
+  <script>
+    // script untuk merubah gambar sesuai input user
+    let gambar = document.getElementById('gambar');
+    let gambarMhs = document.getElementById('gambarMhs');
+
+    gambar.onchange = function (evt)  {
+      const [file] = gambar.files;
+      if (file) {
+        gambarMhs.src = URL.createObjectURL(file);
+      }
+    }
+  </script>
 </body>
 </html>

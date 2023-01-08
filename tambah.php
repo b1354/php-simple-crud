@@ -59,11 +59,13 @@
     <input type="text" name="prodi" id="prodi" class="form-control" required>
 
     <label class="form-label" for="gambar">gambar: </label>
-    <input type="file" name="gambar" id="gambar" class="form-control">
+    <input type="file" name="gambar" id="gambar" class="form-control" accept="image/jpg image/png">
 
-    <br>
-
-    <button class="btn btn-primary" type="submit" name="submit"><b>+</b> Tambah data</button></li>
+    <div class="my-3">
+      <a href="index.php" class="btn btn-warning"><span class="bi bi-arrow-left-circle"></span> Kembali</a>
+      <button class="btn btn-primary" type="submit" name="submit"><b>+</b> Tambah Data</button></li>
+    </div>
+    
   </form>
   </div>
 

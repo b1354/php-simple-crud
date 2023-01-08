@@ -27,12 +27,10 @@
     $tmp_name = explode(".", $data["name"]);
     $fileExtension = end( $tmp_name );
     $fileName = uniqid(rand(), true) . "." . $fileExtension;
-    var_dump($data);
 
-    if($data["error"])  {
-      $result["error"] = true;
-      $result["message"] = "gambar harus dimasukan";
-      return $result;
+    if($data["error"] == 4)  {
+      $fileName = "default.png";
+      return $fileName;
     }
 
     if($data["size"] > 500000 ) {
@@ -43,6 +41,15 @@
 
     move_uploaded_file($data["tmp_name"], $path."/".$fileName);
     return $fileName;
+  }
+
+  function deleteImage($id) {
+    global $conn;
+
+    $query = "UPDATE mahasiswa SET gambar='default.png' WHERE id=$id";
+    mysqli_query($conn, $query);
+
+    return mysqli_affected_rows($conn);
   }
 
   function tambah ($data) {
@@ -56,7 +63,7 @@
     $email = htmlspecialchars($data['email']);
     $prodi = htmlspecialchars($data['prodi']);
 
-    $gambar = uploadImage($_FILES['gambar'], "image");
+    $gambar = uploadImage($_FILES['gambar'], "images");
 
     $query = "INSERT INTO mahasiswa
                 (nim, nama, email, prodi, gambar)
@@ -74,6 +81,12 @@
   function hapus ($id) {
     global $conn;
 
+    $mahasiswa = query("SELECT gambar FROM mahasiswa WHERE id=$id")[0]['gambar'];
+
+    if ($mahasiswa != "default.png") {
+      unlink("images/$mahasiswa");
+    }
+
     mysqli_query($conn, "DELETE FROM mahasiswa WHERE id = $id");
 
     return mysqli_affected_rows($conn);
@@ -86,16 +99,30 @@
     $nama = htmlspecialchars($data['nama']);
     $email = htmlspecialchars($data['email']);
     $prodi = htmlspecialchars($data['prodi']);
-    $gambar = htmlspecialchars($data['gambar']);
-
-    $query = "UPDATE mahasiswa 
+    
+    if ($_FILES["gambar"]["error"] != 4) {
+      $gambarLama = query("SELECT * FROM mahasiswa WHERE id=$id")[0]["gambar"];
+      $gambarBaru = uploadImage($_FILES["gambar"], "images");
+      $query = "UPDATE mahasiswa
+                SET
+                  nim = '$nim',
+                  nama = '$nama',
+                  email = '$email',
+                  prodi = '$prodi',
+                  gambar = '$gambarBaru'
+                WHERE id = $id";
+      if ($gambarLama != "default.png") {
+        unlink("images/$gambarLama");
+      }
+    } else {
+      $query = "UPDATE mahasiswa 
               SET 
                 nim = '$nim',
                 nama = '$nama',
                 email = '$email',
                 prodi = '$prodi',
-                gambar = '$gambar'
               WHERE id = $id";
+    }
 
     mysqli_query($conn, $query);
 

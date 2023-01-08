@@ -1,12 +1,14 @@
 <?php 
   // include functions.php;
   require 'functions.php';
-
+  
   if ( isset($_GET["submit"]) && $_GET["keyword"] ) {
     $mahasiswa = cari($_GET["keyword"]);
   } else {
     $mahasiswa = query("SELECT * FROM mahasiswa");
   };
+
+  $jumlahMhs = mysqli_affected_rows($conn);
   
 ?>
 
@@ -57,7 +59,7 @@
     <p>
       <a class="btn btn-sm btn-primary my-2" href="tambah.php"><b>+</b> Tambah data mahasiswa</a>
       <?php if(isset($_GET["submit"])) :?>
-      <a class="btn btn-sm btn-danger my-2" href="/belajarphp/datamahasiswa/"><b>!</b> Bersihkan Search</a>
+      <a class="btn btn-sm btn-warning my-2" href="/belajarphp/datamahasiswa/"><b><?= $jumlahMhs?></b> Bersihkan Search</a>
       <?php endif ?>
     </p>
 
@@ -89,7 +91,15 @@
               onclick="return confirm('apakah benar ingin menghapus?')"
             ><span class="bi bi-trash"></span></a>
           </td>
-          <td><img width="100" height="100" src="image/<?= $row["gambar"]?>" alt="<?= $row["gambar"] ?>"></td>
+          <td>
+            <img 
+              width="100" 
+              height="100" 
+              src="images/<?= $row["gambar"]?>" 
+              alt="<?= $row["gambar"] ?>" 
+              style="object-fit: contain"
+            >
+          </td>
           <td><?= $row["nim"] ?></td>
           <td><?= $row["nama"] ?></td>
           <td><?= $row["email"] ?></td>
@@ -99,6 +109,9 @@
         <?php endforeach; ?>
 
       </table>
+      <?php if (!$jumlahMhs): ?>
+      <p class="text-center text-secondary">tidak ada data yang tersedia</p>
+      <?php endif ?>
     </div>
 
   </div>
