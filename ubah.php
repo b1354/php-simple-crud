@@ -5,9 +5,9 @@
   $id =$_GET['id'];
 
   // cek apakah tombol delete image ditekan
-  if ( isset($_POST["deleteImg"]) ) {
-    deleteImage($id);
-  }
+  // if ( isset($_POST["deleteImg"]) ) {
+  //   deleteImage($id);
+  // }
 
   // karena hasil dari fungsi query adalah array, maka diambil index pertamanya
   // disimpan dibawah delete image agar mendapatkan perubahan terbaru jika didelete
@@ -16,7 +16,12 @@
   // cek apakah tombol submit sudah ditekan
   if ( isset($_POST["submit"]) ) {
     // cek apakah data berhasil diubah
-    if ( ubah($_POST, $mhs['id']) > 0 ) {
+
+    if ( $_POST["isGambarDeleted"] ) {
+      deleteImage($id);
+    }
+
+    if ( ubah($_POST, $mhs['id']) >= 0 ) {
       echo "
         <script>
           document.location.href = 'index.php';
@@ -80,12 +85,14 @@
         style="object-fit: contain; display: block"
       >
     </label>
-    <button class="btn btn-sm btn-danger my-3" type="submit" name="deleteImg"><span class="bi bi-trash"></span>Delete gambar</button>
+    
+    <input type="hidden" name="isGambarDeleted" id="isGambarDeleted">
+    <a class="btn btn-sm btn-danger my-3" name="deleteImg" id="deleteGambarMhs"><span class="bi bi-trash"></span>Delete gambar</a>
     <input type="file" name="gambar" id="gambar" class="form-control" accept="images/jpg images/jpg">
 
     <div class="my-3">
       <a href="index.php" class="btn btn-warning"><span class="bi bi-arrow-left-circle"></span> Kembali</a>
-      <button class="btn btn-primary" type="submit" name="submit"><b>+</b> ubah Data</button></li>
+      <button class="btn btn-primary" type="submit" name="submit"><b>+</b> Simpan Perubahan </button></li>
     </div>
 
   </form>
@@ -96,6 +103,14 @@
     // script untuk merubah gambar sesuai input user
     let gambar = document.getElementById('gambar');
     let gambarMhs = document.getElementById('gambarMhs');
+    let isGambarDeleted = document.getElementById('isGambarDeleted')
+    let deleteGambarMhs = document.getElementById("deleteGambarMhs");
+
+    deleteGambarMhs.onclick = function(ev) {
+      isGambarDeleted.value = "true"
+      gambar.value = ""
+      gambarMhs.src = "images/default.png"
+    }
 
     gambar.onchange = function (evt)  {
       const [file] = gambar.files;

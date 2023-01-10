@@ -58,7 +58,15 @@
     <label class="form-label" for="prodi">prodi: </label>
     <input type="text" name="prodi" id="prodi" class="form-control" required>
 
-    <label class="form-label" for="gambar">gambar: </label>
+    <label class="form-label m-0" for="gambar" style="display:block">gambar: 
+      <img 
+        src="images/default.png"
+        width="150" height="150"
+        id="gambarMhs"
+        style="object-fit: contain; display: block"
+      >
+    </label>
+    <a class="btn btn-sm btn-danger my-3" id="deleteGambarMhs"><span class="bi bi-trash"></span>Hapus gambar</a>
     <input type="file" name="gambar" id="gambar" class="form-control" accept="image/jpg image/png">
 
     <div class="my-3">
@@ -68,6 +76,24 @@
     
   </form>
   </div>
+
+  <script type="text/javascript">
+    let gambarMhs = document.getElementById("gambarMhs")
+    let gambar = document.getElementById("gambar")
+    let deleteGambarMhs = document.getElementById("deleteGambarMhs")
+
+    deleteGambarMhs.onclick = function(ev) {
+      gambar.value = ""
+      gambarMhs.src = "images/default.png"
+    }
+
+    gambar.onchange = function(ev) {
+      const [file] = gambar.files
+      if (file) {
+        gambarMhs.src = URL.createObjectURL(file)
+      }
+    }
+  </script>
 
 </body>
 </html>

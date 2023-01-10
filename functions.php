@@ -45,6 +45,11 @@
 
   function deleteImage($id) {
     global $conn;
+    $mahasiswa = query("SELECT gambar FROM mahasiswa WHERE id=$id")[0]['gambar'];
+
+    if ($mahasiswa != "default.png" ) {
+      unlink("images/$mahasiswa");
+    }
 
     $query = "UPDATE mahasiswa SET gambar='default.png' WHERE id=$id";
     mysqli_query($conn, $query);
@@ -81,9 +86,9 @@
   function hapus ($id) {
     global $conn;
 
-    $mahasiswa = query("SELECT gambar FROM mahasiswa WHERE id=$id")[0]['gambar'];
+    $gambarMahasiswa = query("SELECT gambar FROM mahasiswa WHERE id=$id")[0]['gambar'];
 
-    if ($mahasiswa != "default.png") {
+    if ($gambarMahasiswa != "default.png") {
       unlink("images/$mahasiswa");
     }
 
@@ -120,11 +125,14 @@
                 nim = '$nim',
                 nama = '$nama',
                 email = '$email',
-                prodi = '$prodi',
+                prodi = '$prodi'
               WHERE id = $id";
     }
 
     mysqli_query($conn, $query);
+
+    // var_dump($conn);
+    // die;
 
     return mysqli_affected_rows($conn);
   }
