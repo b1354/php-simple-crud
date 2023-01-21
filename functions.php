@@ -1,8 +1,10 @@
 <?php 
+  session_start();
   mysqli_report(MYSQLI_REPORT_OFF);
 
   $conn = mysqli_connect("localhost", "bayu", "bayurizky1354", "db_data_mahasiswa");
 
+  // hanya dapat digunakan untuk mengambil data dari database
   function query($query) {
     // diperlukan keyword global untuk mengakses variabel global
     global $conn;
@@ -11,7 +13,7 @@
     $rows = [];
 
     if ( !$result ) {
-      // var_dump($conn);
+      // var_dump($conn); die;
       return "terjadi kesalahan saat query ke database";
     }
 
@@ -150,6 +152,84 @@
     
     return query($query);
 
+  }
+
+  function checkSession($value, $fallback, $isset=false) {
+    if ($isset) {
+      if( isset($_SESSION[$value]) ) {
+        header("Location: $fallback");
+        exit;
+      }
+    } else {
+      if ( !isset($_SESSION[$value]) ) {
+        header("Location: $fallback");
+        exit;
+      }
+    }
+  }
+
+  function daftar($data) {
+    global $conn;
+
+    $error = [];
+
+    $username = htmlspecialchars($data['username']);
+    $email = htmlspecialchars($data['email']);
+    $password = password_hash($data['password'], PASSWORD_DEFAULT);
+
+    // cek panjang passwor
+    if (strlen($data['password']) < 4) {
+      $error[] = "password harus lebih dari 3 karakter";
+    }
+
+    // cek apakah user sudah ada
+    $checkUser = query("SELECT username FROM user");
+
+    foreach($checkUser as $user) {
+      if($user["username"] == $username){
+        $error[] = "username sudah diambil";
+      }
+    }
+
+    if (count($error)) {
+      return [ "message" => $error ];
+    }
+
+    $sql = "INSERT INTO user (username, email, password) VALUES ('$username', '$email', '$password')";
+    mysqli_query($conn, $sql);
+
+    if (mysqli_affected_rows($conn)) {
+      $_SESSION["user_data"] = query("SELECT * FROM user WHERE username='$username'")[0];
+      $_SESSION["login"] = true;
+      return [ "message" => "success" ];
+    }
+
+    $error["message"][] = "terjadi error saat register";
+    return $error;
+  }
+
+  function login ($data) {
+    global $conn;
+
+    $username = $data["username"];
+    $password = $data["password"];
+
+    $row = query("SELECT * FROM user WHERE username='$username'")[0];
+
+    
+    if ( isset($row["username"] ) ) {
+      if ( password_verify($password, $row["password"]) ) {
+        $_SESSION["user_data"] = $row;
+        $_SESSION["login"] = true;
+        return [ "message" => "success" ];
+      }
+    }
+
+    if ($conn->error) {
+      return [ "message" => "terjadi masalah saat login" ];
+    }
+
+    return [ "message" => "username atau password salah" ];
   }
 
 ?>
