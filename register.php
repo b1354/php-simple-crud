@@ -1,8 +1,9 @@
 <?php 
   require "functions.php";
 
+  checkCookie($_COOKIE);
   // (variabel yang dicek, halaman yang dituju, isset(true/false))
-  checkSession("login", "index.php", true);
+  checkSession("user_data", "index.php", true);
 
   if(isset($_POST["submit"])) {
     $register = daftar($_POST);

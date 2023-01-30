@@ -2,7 +2,8 @@
   // include functions.php;
   require 'functions.php';
 
-  checkSession("login", "login.php");
+  checkCookie($_COOKIE);
+  checkSession("user_data", "login.php");
   
   if ( isset($_GET["submit"]) && $_GET["keyword"] ) {
     $mahasiswa = cari($_GET["keyword"]);

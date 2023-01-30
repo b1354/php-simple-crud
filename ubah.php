@@ -1,6 +1,9 @@
 <?php 
   include 'functions.php';
 
+  checkCookie($_COOKIE);
+  checkSession("user_data", "login.php");
+
   // ambil data di url
   $id =$_GET['id'];
 

@@ -1,6 +1,9 @@
 <?php 
   include 'functions.php';
 
+  checkCookie($_COOKIE);
+  checkSession("user_data", "login.php");
+
   // cek apakah tombol submit sudah ditekan
   if ( isset($_POST["submit"]) ) {
     if ( tambah($_POST) > 0 ) {

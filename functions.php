@@ -168,6 +168,22 @@
     }
   }
 
+  function checkCookie($cookie) {
+    if ( !isset($cookie['cookie_id']) || !isset($cookie['cookie_id']) ) {
+      return false;
+    }
+
+    $userId = $cookie['cookie_id'];
+    $username = $cookie['cookie_key'];
+    $row = query("SELECT * FROM user WHERE id_user=$userId")[0];
+
+    if ( hash("sha256", $row['username']) === $username ) {
+      $_SESSION["user_data"] = $row;
+      $_SESSION["login"] = true;
+    }
+    
+  }
+
   function daftar($data) {
     global $conn;
 
@@ -199,8 +215,6 @@
     mysqli_query($conn, $sql);
 
     if (mysqli_affected_rows($conn)) {
-      $_SESSION["user_data"] = query("SELECT * FROM user WHERE username='$username'")[0];
-      $_SESSION["login"] = true;
       return [ "message" => "success" ];
     }
 
@@ -215,14 +229,22 @@
     $password = $data["password"];
 
     $row = query("SELECT * FROM user WHERE username='$username'")[0];
-
+    $checkPw = password_verify($password, $row["password"]);
     
-    if ( isset($row["username"] ) ) {
-      if ( password_verify($password, $row["password"]) ) {
-        $_SESSION["user_data"] = $row;
-        $_SESSION["login"] = true;
-        return [ "message" => "success" ];
+    if ( isset($row["username"]) && $checkPw ) {
+      $_SESSION["user_data"] = $row;
+      $_SESSION["login"] = true;
+
+      if ( isset($_POST["rememberMe"]) ) {
+        // buat cookie
+        // untuk membuat cookie dengan time limit gunakan:
+        // setcookie('nama_cookie', 'isi_cookie', time() + 60) (waktu saat ini + 60 detik)
+        // jika tidak menggunakan waktu maka cookie akan berlaku selama session saja
+        setcookie( 'cookie_id', $row['id_user'], time()+60*60*24*7 );
+        setcookie( 'cookie_key', hash("sha256", $row['username']), time()+60*60*24*7 );
       }
+
+      return [ "message" => "success" ];
     }
 
     if ($conn->error) {
