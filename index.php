@@ -145,9 +145,27 @@
         <p class="text-center text-secondary">tidak ada data yang tersedia</p>
         <?php endif ?>
       </div>
+    </div>
 
+    <div class="container-fluid mt-5 pt-5 pb-3 bg-dark" >
+      <footer class="d-flex justify-content-center align-items-center p-2 text-light">
+        <div class="align-items-center text-center">
+          <p class="h4 fw-bold ">Data Mahasiswa</p>
+          <p class="fw-bol">
+            find me at github:
+            <a class="text-decoration-none fw-bold text-light" href="https://github.com/b1354" target="blank">
+              b1354 <span class="bi bi-github"></span>
+            </a>
+          </p>
+          <span class="h1 bi bi-bootstrap-fill"></span>
+          <p class="my-1">Powered By Bootstrap</p>
+          <a class="text-decoration-none text-light" href="https://getbootstrap.com">getbootstrap.com</a>
+        </div>
+      </footer>
+      <hr style="width: 100px; color: white; margin: 5px auto">
     </div>
   </div>
+
 </body>
 
 </html>
