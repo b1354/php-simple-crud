@@ -254,4 +254,19 @@
     return [ "message" => "username atau password salah" ];
   }
 
+  function pagination($limit, $query) {
+    global $conn;
+
+    $totalData = mysqli_num_rows( mysqli_query($conn, $query) );
+    $jumlahHalaman = ceil($totalData/$limit);
+    $indexHalaman = ($_GET["page"]>1) ? ($_GET["page"]-1)*$limit:0;
+
+    return [
+      'limit' => $limit,
+      "totalData" => $totalData,
+      "jumlahHalaman" => $jumlahHalaman,
+      "indexHalaman" => $indexHalaman
+    ];
+  }
+
 ?>
