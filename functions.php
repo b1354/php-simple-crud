@@ -259,7 +259,8 @@
 
     $totalData = mysqli_num_rows( mysqli_query($conn, $query) );
     $jumlahHalaman = ceil($totalData/$limit);
-    $indexHalaman = ($_GET["page"]>1) ? ($_GET["page"]-1)*$limit:0;
+    $currentPage = ( isset($_GET["page"]) ) ? $_GET["page"]:0;
+    $indexHalaman = ($currentPage>1) ? ($currentPage-1)*$limit:0;
 
     return [
       'limit' => $limit,
