@@ -1,1 +1,4 @@
-images/*
+db/*
+logs/*
+!src/images
+src/images/*

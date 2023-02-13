@@ -1,0 +1,40 @@
+version: "3"
+services:
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src/:/var/www/html
+      - ./logs/nginx:/var/log/nginx
+    networks:
+      - internal
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: php
+    volumes:
+      - ./src/:/var/www/html
+    networks:
+      - internal
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'datamahasiswa'
+      MYSQL_USER: 'datamahasiswa'
+      MYSQL_PASSWORD: '123'
+      MYSQL_ROOT_PASSWORD: 'bayurizky1354'
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./db:/var/lib/mysql
+    networks:
+      - internal
+networks:
+  internal:
+    driver: bridge
