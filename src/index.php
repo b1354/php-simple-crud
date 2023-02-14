@@ -179,6 +179,31 @@
       </div>
     </div>
 
+ <!-- Pagination -->
+        <?php if (isset($jumlahHalaman)) :?>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item">
+                <a class="page-link <?= ($currentPage<=1) ? "disabled":"" ?>" href="?page=<?=$currentPage-1?>" aria-label="Previous">
+                  <span aria-hidden="true">&laquo;</span>
+                </a>
+              </li>
+
+              <?php for($i=1; $i<=$jumlahHalaman; $i++): ?>
+              <li class="page-item"><a class="page-link <?= ($i == $currentPage) ? "disabled":""?>" href="?page=<?=$i?>"><?= $i?></a></li>
+              <?php endfor ?>
+
+              <li class="page-item">
+                <a class="page-link <?= ($currentPage>= $jumlahHalaman) ? "disabled":"" ?>" href="?page=<?=$currentPage+1?>" aria-label="Next">
+                  <span aria-hidden="true">&raquo;</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        <?php endif ?>
+        <!-- End Pagination -->
+
+
     <div class="container-fluid mt-5 pt-5 pb-3 bg-dark" >
       <footer class="d-flex justify-content-center align-items-center p-2 text-light">
         <div class="align-items-center text-center">
