@@ -39,6 +39,7 @@
     }
 
     move_uploaded_file($data["tmp_name"], $path."/".$fileName);
+
     return $fileName;
   }
 
@@ -83,7 +84,7 @@
     $gambarMahasiswa = query("SELECT gambar FROM mahasiswa WHERE id=$id")[0]['gambar'];
 
     if ($gambarMahasiswa != "default.png") {
-      unlink("images/$mahasiswa");
+      unlink("images/$gambarMahasiswa");
     }
 
     mysqli_query($conn, "DELETE FROM mahasiswa WHERE id = $id");
